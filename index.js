@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const res = require('express/lib/response');
 
+// middleware here
 app.use(cors());
 app.use(express.json());
 
@@ -55,6 +56,14 @@ async function run() {
             };
             const result = await stockCollection.updateOne(filter, updateDoc, options)
             res.send(result)
+        })
+
+        // Add Stocks
+        app.post('/stock', async (req, res) => {
+            const addStock = req.body;
+            const result = await stockCollection.insertOne(addStock);
+            res.send(result);
+
         })
 
     }
