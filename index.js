@@ -64,7 +64,10 @@ async function run() {
 
         app.get('/singlestock', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
+            console.log('decoded email', decodedEmail)
             const email = req.query.email;
+            console.log('email', email)
+
             // console.log(email)
             if (email === decodedEmail) {
                 const query = { email: email };
@@ -85,7 +88,7 @@ async function run() {
             const result = await stockCollection.deleteOne(query);
             res.send(result);
         })
-        app.delete('/singlestock', async (req, res) => {
+        app.delete('/singlestock/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
             const result = await stockCollection.deleteOne(query);
@@ -96,6 +99,7 @@ async function run() {
         app.put('/stock/:id', async (req, res) => {
             const id = req.params.id;
             const updateQuantity = req.body;
+            console.log(updateQuantity)
             const filter = { _id: ObjectId(id) };
             const options = { upsert: true };
             const updateDoc = {
