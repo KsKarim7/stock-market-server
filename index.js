@@ -13,7 +13,9 @@ app.use(express.json());
 
 function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization;
+    console.log('auth', authHeader, req.headers)
     if (!authHeader) {
+        console.log(authHeader)
         return res.status(401).send({ message: 'unauthorized access' });
     }
     const token = authHeader.split(' ')[1];
@@ -40,6 +42,7 @@ async function run() {
         // auth
         app.post('/login', async (req, res) => {
             const user = req.body;
+            console.log(user)
             const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
                 expiresIn: '1d'
             });
@@ -64,15 +67,19 @@ async function run() {
 
         app.get('/singlestock', verifyJWT, async (req, res) => {
             const decodedEmail = req.decoded.email;
+            // const authHeader = req.headers.authorization;
+            // console.log(authHeader)
             console.log('decoded email', decodedEmail)
             const email = req.query.email;
-            console.log('email', email)
+            // console.log('email', email)
 
             // console.log(email)
             if (email === decodedEmail) {
+                console.log('hit')
                 const query = { email: email };
                 const cursor = stockCollection.find(query);
                 const stocks = await cursor.toArray();
+                // console.log(stocks)
                 res.send(stocks)
             }
             else {
