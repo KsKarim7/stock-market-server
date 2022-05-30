@@ -95,6 +95,7 @@ async function run() {
             const result = await stockCollection.deleteOne(query);
             res.send(result);
         })
+
         app.delete('/singlestock/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: ObjectId(id) }
